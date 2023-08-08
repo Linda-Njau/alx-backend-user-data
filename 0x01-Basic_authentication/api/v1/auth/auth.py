@@ -4,6 +4,7 @@
 from flask import request
 from typing import List, TypeVar
 
+
 class Auth():
     """ authentication"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
@@ -16,14 +17,14 @@ class Auth():
             elif i in {path, path + '/'}:
                 return False
         return True
-        
+
     def authorization_header(self, request=None) -> str:
         """ return None - request"""
         if request is None or "Authorization" in request.headers:
             return None
         else:
             return request.headers.get("Authorization")
-    
+
     def current_user(self, request=None) -> TypeVar('User'):
         """ return None - request"""
         return None
