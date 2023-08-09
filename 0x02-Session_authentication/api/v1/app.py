@@ -16,10 +16,10 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 auth = None
 
-if getenv ("AUTH_TYPE") == "session_auth":
+if getenv("AUTH_TYPE") == "session_auth":
     from api.v1.auth.session_auth import SessionAuth
     auth = SessionAuth()
-    
+
 elif getenv("AUTH_TYPE") == "basic_auth":
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
@@ -39,12 +39,14 @@ def request_filter() -> None:
     ]
     if auth:
         if auth.require_auth(request.path, excluded_paths):
-            if auth.authorization_header(request) is None and auth.session_cookie(
-                request) is None:
+            if auth.authorization_header(
+                    request) is None and auth.session_cookie(
+                    request) is None:
                 abort(401)
             if auth.current_user(request) is None:
                 abort(403)
             request.current_user = auth.current_user(request)
+
 
 @app.errorhandler(404)
 def not_found(error) -> str:
