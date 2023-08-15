@@ -22,9 +22,8 @@ class Auth:
                 raise ValueError("User {} already exists".format(email))
         except NoResultFound:
             hashed_password = _hash_password(password)
-            self.db.add_user(email=email, hashed_password=hashed_password)
-
-
+            new_user = self.db.add_user(email=email, hashed_password=hashed_password)
+            return new_user
 def _hash_password(password: str) -> bytes:
     """takes a password and returns bytes"""
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())

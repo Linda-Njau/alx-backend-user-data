@@ -21,10 +21,17 @@ def register_user() -> str:
     """registers a new user"""
     email = request.form.get("email")
     password = request.form.get("password")
-    user = AUTH.register_user(email, password)
-    if not user:
-        return jsonify({"message": "email already registered"}), 400
-    return jsonify({"email": user.email, "message": "user created"})
+    try:
+        new_user = AUTH.register_user(email, password)
+        if new_user is not None:
+            return jsonify({
+                "email": new_user.email,
+                "message": "user created"
+            })
+    except ValueError:
+        return jsonify({
+            "message": "email already registered"
+        }), 400
 
 
 if __name__ == "__main__":
