@@ -7,6 +7,7 @@ from db import DB
 from user import User
 import bcrypt
 from sqlalchemy.orm.exc import NoResultFound
+import uuid
 
 
 class Auth:
@@ -22,8 +23,28 @@ class Auth:
                 raise ValueError("User {} already exists".format(email))
         except NoResultFound:
             hashed_password = _hash_password(password)
-            new_user = self.db.add_user(email=email, hashed_password=hashed_password)
+            new_user = self.db.add_user(
+                email=email, hashed_password=hashed_password)
             return new_user
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """Checks for valid login email and password"""
+        try:
+            user = self.db.find_user_by(email=email)
+            if user and bcrypt.checkpw(
+                    password.encode('utf8'), user.hashed_password):
+                return True
+            return False
+        except NoResultFound:
+            return False
+
+
+def _generate_uuid() -> str:
+    """Generates a random uuid"""
+    new_uuid = uuid.uuid4()
+    return str(new_uuid)
+
+
 def _hash_password(password: str) -> bytes:
     """takes a password and returns bytes"""
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
