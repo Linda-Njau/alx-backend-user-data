@@ -50,16 +50,16 @@ class Auth:
         self._db.update_user(user.id, session_id=session_id)
         return session_id
 
-    def get_user_from_session_id(self, session_id: str) -> Union[str, None]:
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         """returns the user corresponding to the given session"""
+        user = None
         if session_id is None:
             return None
         try:
             user = self._db.find_user_by(session_id=session_id)
-            return user
         except NoResultFound:
             return None
-
+        return user
     def destroy_session(self, user_id: str) -> None:
         """update session id for corresponding user to None"""
         if user_id is None:
