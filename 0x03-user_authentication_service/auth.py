@@ -60,6 +60,7 @@ class Auth:
         except NoResultFound:
             return None
         return user
+
     def destroy_session(self, user_id: str) -> None:
         """update session id for corresponding user to None"""
         if user_id is None:

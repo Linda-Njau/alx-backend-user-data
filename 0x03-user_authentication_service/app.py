@@ -61,7 +61,7 @@ def logout():
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
-def profile() ->str:
+def profile() -> str:
     """returns the profile"""
     user_cookie = request.cookies.get("session_id", None)
     if user_cookie is None:
@@ -73,7 +73,7 @@ def profile() ->str:
 
 
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
-def reset_password():
+def reset_password() -> str:
     """reset password token"""
     email = request.form.get('email')
     is_registered = AUTH.create_session(email)
